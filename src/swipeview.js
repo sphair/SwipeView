@@ -275,7 +275,9 @@ var SwipeView = (function(){
 			this.moved = true;
 			this.pointX = point.pageX;
 			this.pointY = point.pageY;
-			this.directionX = deltaX > 0 ? 1 : deltaX < 0 ? -1 : 0;
+			if (deltaX !== 0) {
+				this.directionX = deltaX > 0 ? 1 : -1;
+			}
 			this.stepsX += Math.abs(deltaX);
 			this.stepsY += Math.abs(deltaY);
 
