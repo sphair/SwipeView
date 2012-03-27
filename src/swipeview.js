@@ -320,7 +320,7 @@ var SwipeView = (function(){
 			if (!this.initiated) return;
 			
 			var point = hasTouch ? e.changedTouches[0] : e,
-				dist = Math.abs(point.pageX - this.startX);
+				dist = point.pageX - this.startX;
 
 			this.initiated = false;
 			
@@ -332,8 +332,14 @@ var SwipeView = (function(){
 			}
 
 			// Check if we exceeded the snap threshold
-			if (dist < this.snapThreshold) {
-				this.slider.style.webkitTransitionDuration = Math.floor(300 * dist / this.snapThreshold) + 'ms';
+			if (Math.abs(dist) < this.snapThreshold) {
+				this.slider.style.webkitTransitionDuration = Math.floor(300 * Math.abs(dist) / this.snapThreshold) + 'ms';
+				this.__pos(-this.page * this.pageWidth);
+				return;
+			}
+			// Check if swipe was cancelled by reversing swipe direction
+			if ((dist < 0 && this.directionX >= 0) || (dist > 0 && this.directionX <= 0)) {
+				this.slider.style.webkitTransitionDuration = Math.floor(300 * Math.abs(dist) / this.pageWidth) + 'ms';
 				this.__pos(-this.page * this.pageWidth);
 				return;
 			}
