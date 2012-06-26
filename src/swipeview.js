@@ -22,6 +22,7 @@ var SwipeView = (function(){
 				numberOfPages: 3,
 				snapThreshold: null,
 				hastyPageFlip: false,
+				removeFirstAbsolute: false,
 				loop: true
 			};
 		
@@ -44,7 +45,14 @@ var SwipeView = (function(){
 			for (i=-1; i<2; i++) {
 				div = document.createElement('div');
 				div.id = 'swipeview-masterpage-' + (i+1);
-				div.style.cssText = '-webkit-transform:translateZ(0);position:absolute;top:0;height:100%;width:100%;left:' + i*100 + '%';
+
+				// We can remove absolute positioning on one element to make it grow the containing div. If all was non-absolute, the height of the
+				// containing div would by pageheight * 3. If all is absolute, containing div height is 0.
+				if (i === 0 && this.options.removeFirstAbsolute)
+					div.style.cssText = '-webkit-transform:translateZ(0);top:0;height:100%;width:100%;left:' + i*100 + '%';
+				else
+					div.style.cssText = '-webkit-transform:translateZ(0);position:absolute;top:0;height:100%;width:100%;left:' + i*100 + '%';
+
 				if (!div.dataset) div.dataset = {};
 				pageIndex = i == -1 ? this.options.numberOfPages - 1 : i;
 				div.dataset.pageIndex = pageIndex;
