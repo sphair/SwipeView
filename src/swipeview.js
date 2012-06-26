@@ -139,6 +139,7 @@ var SwipeView = (function(){
 			this.wrapperWidth = this.wrapper.clientWidth;
 			this.wrapperHeight = this.wrapper.clientHeight;
 			this.pageWidth = this.wrapperWidth;
+			if (this.pageWidth === 0) this.pageWidth = 1;
 			this.maxX = -this.options.numberOfPages * this.pageWidth + this.wrapperWidth;
 			this.snapThreshold = this.options.snapThreshold === null ?
 				Math.round(this.pageWidth * 0.15) :
