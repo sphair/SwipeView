@@ -63,6 +63,7 @@ var SwipeView = (function(){
 			this.wrapper.addEventListener(startEvent, this, false);
 			this.wrapper.addEventListener(moveEvent, this, false);
 			this.wrapper.addEventListener(endEvent, this, false);
+			this.wrapper.addEventListener(cancelEvent, this, false);
 			this.slider.addEventListener('webkitTransitionEnd', this, false);
 
 /*			if (!hasTouch) {
@@ -97,6 +98,16 @@ var SwipeView = (function(){
 			this.customEvents.push(['touchstart', fn]);
 		},
 
+		onTouchEnd: function (fn) {
+			this.wrapper.addEventListener('swipeview-touchend', fn, false);
+			this.customEvents.push(['touchend', fn]);
+		},
+
+		onTouchCancel: function (fn) {
+			this.wrapper.addEventListener('swipeview-touchcancel', fn, false);
+			this.customEvents.push(['touchcancel', fn]);
+		},
+
 		destroy: function () {
 			while ( this.customEvents.length ) {
 				this.wrapper.removeEventListener('swipeview-' + this.customEvents[0][0], this.customEvents[0][1], false);
@@ -108,6 +119,7 @@ var SwipeView = (function(){
 			this.wrapper.removeEventListener(startEvent, this, false);
 			this.wrapper.removeEventListener(moveEvent, this, false);
 			this.wrapper.removeEventListener(endEvent, this, false);
+			this.wrapper.removeEventListener(cancelEvent, this, false);
 			this.slider.removeEventListener('webkitTransitionEnd', this, false);
 
 /*			if (!hasTouch) {
@@ -205,8 +217,10 @@ var SwipeView = (function(){
 					this.__move(e);
 					break;
 				case cancelEvent:
+					this.__cancelevent(e);
+					break;
 				case endEvent:
-					this.__end(e);
+					this.__endevent(e);
 					break;
 				case resizeEvent:
 					this.__resize();
@@ -337,6 +351,16 @@ var SwipeView = (function(){
 			this.__checkPosition();
 		},
 		
+		__cancelevent: function (e) {
+			this.__event('touchcancel');
+			this.__end(e);
+		},
+
+		__endevent: function (e) {
+			this.__event('touchend');
+			this.__end(e);
+		},
+
 		__checkPosition: function () {
 			var pageFlip,
 				pageFlipIndex,
